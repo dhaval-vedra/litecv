@@ -1,0 +1,21 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="60" fill="#2E3440" rx="8"/>
+
+  <!-- LiteCV Text -->
+  <text x="10" y="20" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#88C0D0">Lite</text>
+  <text x="10" y="40" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#88C0D0">CV</text>
+
+  <!-- Camera Icon -->
+  <circle cx="150" cy="30" r="12" fill="none" stroke="#88C0D0" stroke-width="2"/>
+  <circle cx="150" cy="30" r="8" fill="#88C0D0"/>
+  <rect x="142" y="25" width="16" height="10" fill="#2E3440"/>
+  <circle cx="150" cy="30" r="4" fill="#2E3440"/>
+  <circle cx="150" cy="30" r="2" fill="#88C0D0"/>
+
+  <!-- Lens flare effect -->
+  <line x1="135" y1="30" x2="145" y2="30" stroke="#88C0D0" stroke-width="1"/>
+  <line x1="155" y1="30" x2="165" y2="30" stroke="#88C0D0" stroke-width="1"/>
+  <line x1="150" y1="15" x2="150" y2="25" stroke="#88C0D0" stroke-width="1"/>
+  <line x1="150" y1="35" x2="150" y2="45" stroke="#88C0D0" stroke-width="1"/>
+</svg>
