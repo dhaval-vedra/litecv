@@ -1,10 +1,8 @@
-<div align="center">
 
 ![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-Optimized-C51A4A?style=for-the-badge&logo=raspberrypi)
 ![Python](https://img.shields.io/badge/Python-3.6%2B-blue?style=for-the-badge&logo=python)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)
-
 
 # LiteCV - Lightweight Computer Vision Library
 
