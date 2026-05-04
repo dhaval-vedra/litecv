@@ -41,15 +41,15 @@ setup(
     
     # लेखक और लाइसेंस
     author="VEDRA",
-    author_email="author@example.com",
+    author_email="gametidhaval980@gmail.com",
     description="A lightweight, fast, and easy-to-use Python computer vision library",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/litecv",
+    url="https://github.com/dhaval-vedra/litecv",
     project_urls={
-        "Documentation": "https://github.com/yourusername/litecv/docs",
-        "Source": "https://github.com/yourusername/litecv",
-        "Issues": "https://github.com/yourusername/litecv/issues",
+        "Documentation": "https://github.com/dhaval-vedra/litecv/docs",
+        "Source": "https://github.com/dhaval-bedra/litecv",
+        "Issues": "https://github.com/dhaval-vedra/litecv/issues",
     },
     
     # लाइसेंस
