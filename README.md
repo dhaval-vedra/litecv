@@ -1,10 +1,12 @@
+Here's your README.md file formatted properly. Just copy and paste the code below into your README.md file:
+
+```markdown
 <div align="center">
 
-![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-Optimized-C51A4A?style=for-the-badge&logo=raspberrypi)
-![Python](https://img.shields.io/badge/Python-3.6%2B-blue?style=for-the-badge&logo=python)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Status](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)
-
+![Raspberry Pi Optimized](https://img.shields.io/badge/Raspberry%20Pi-Optimized-C51A4A?style=for-the-badge&logo=raspberrypi)
+![Python 3.6+](https://img.shields.io/badge/Python-3.6%2B-blue?style=for-the-badge&logo=python)
+![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Status Active Development](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)
 
 # LiteCV - Lightweight Computer Vision Library
 
@@ -30,84 +32,85 @@
 
 ## About
 
-LiteCV is a lightweight Python computer vision library designed for simplicity and performance. Inspired by OpenCV, it provides essential image processing operations, real-time camera capture, and a collection of filters optimized for both desktop and mobile devices. Built on top of industry-standard libraries like `Pillow`, `pygame`, and `numpy`, LiteCV offers a clean, intuitive API for computer vision tasks.
+LiteCV is a lightweight Python computer vision library designed for simplicity and performance. Inspired by OpenCV, it provides essential image processing operations, real-time camera capture, and a collection of filters optimized for both desktop and mobile devices. Built on top of industry-standard libraries like Pillow, pygame, and numpy, LiteCV offers a clean, intuitive API for computer vision tasks.
 
-### Why LiteCV?
+**Why LiteCV?**
 
-- **Lightweight**: Minimal dependencies, fast imports
-- **Easy to Learn**: Simple, intuitive API inspired by OpenCV
-- **Fast**: Optimized for real-time processing
-- **Mobile-Friendly**: Designed with mobile devices in mind
-- **Well-Documented**: Comprehensive examples and API docs
-- **Active Development**: Regularly maintained and updated
+- **Lightweight:** Minimal dependencies, fast imports
+- **Easy to Learn:** Simple, intuitive API inspired by OpenCV
+- **Fast:** Optimized for real-time processing
+- **Mobile-Friendly:** Designed with mobile devices in mind
+- **Well-Documented:** Comprehensive examples and API docs
+- **Active Development:** Regularly maintained and updated
 
 ---
 
 ## Features
 
 ### Core Image Operations
-- ✅ **Image I/O**: Load, save, and convert images
-- ✅ **Resizing**: Resize by pixels or percentage with quality options
-- ✅ **Color Conversion**: RGB, Grayscale, and color space transformations
-- ✅ **Enhancements**: Brightness, contrast, saturation, sharpness adjustments
+- ✅ **Image I/O:** Load, save, and convert images
+- ✅ **Resizing:** Resize by pixels or percentage with quality options
+- ✅ **Color Conversion:** RGB, Grayscale, and color space transformations
+- ✅ **Enhancements:** Brightness, contrast, saturation, sharpness adjustments
 
 ### Filters & Effects
-- 🎨 **Basic Filters**: Grayscale, Blur, Edges, Sepia
-- 🎨 **Advanced Filters**: Cartoon, Sketch, Thermal, Night Vision, Infrared
-- 🎨 **Motion Detection**: Real-time motion tracking
-- 🎨 **Customizable**: Easy to extend with custom filters
+- 🎨 **Basic Filters:** Grayscale, Blur, Edges, Sepia
+- 🎨 **Advanced Filters:** Cartoon, Sketch, Thermal, Night Vision, Infrared
+- 🎨 **Motion Detection:** Real-time motion tracking
+- 🎨 **Customizable:** Easy to extend with custom filters
 
 ### Drawing & Graphics
-- 🖼️ **Shapes**: Draw circles, rectangles, and lines
-- 🖼️ **Text**: Render text with custom fonts and sizes
-- 🖼️ **Composition**: Concatenate and blend images
+- 🖼️ **Shapes:** Draw circles, rectangles, and lines
+- 🖼️ **Text:** Render text with custom fonts and sizes
+- 🖼️ **Composition:** Concatenate and blend images
 
 ### Camera & Real-Time Processing
-- 📹 **Live Camera Feed**: Real-time camera capture with pygame
-- 📹 **Filter Application**: Apply filters to live video streams
-- 📹 **Interactive UI**: Built-in GUI for camera control
-- 📹 **Frame Control**: Get individual frames or stream frames
+- 📹 **Live Camera Feed:** Real-time camera capture with pygame
+- 📹 **Filter Application:** Apply filters to live video streams
+- 📹 **Interactive UI:** Built-in GUI for camera control
+- 📹 **Frame Control:** Get individual frames or stream frames
 
 ### Advanced Features
-- 🔍 **Object Detection**: Basic object detection framework
-- 🎬 **Video Processing**: Video frame extraction and processing
-- 📊 **NumPy Integration**: Direct array access for advanced operations
-- ⚡ **Caching**: Smart caching for performance optimization
+- 🔍 **Object Detection:** Basic object detection framework
+- 🎬 **Video Processing:** Video frame extraction and processing
+- 📊 **NumPy Integration:** Direct array access for advanced operations
+- ⚡ **Caching:** Smart caching for performance optimization
 
 ---
 
 ## Installation
 
-### From Local Repository (Development)
+### From PyPI
+```bash
+pip install litecv
+```
+
+From Local Repository (Development)
 
 ```bash
 cd litecv
 pip install -e .
 ```
 
-### From PyPI (When Published)
+System Requirements
 
-```bash
-pip install litecv
-```
+· Python: 3.10 or higher
+· Operating System: Windows, macOS, Linux
+· Camera (optional): For real-time camera features
 
-### System Requirements
+Dependencies
 
-- **Python**: 3.10 or higher
-- **Operating System**: Windows, macOS, Linux
-- **Camera** (optional): For real-time camera features
+· pygame>=2.6.1 - Camera capture and real-time display
+· Pillow>=10.0.0 - Image processing
+· numpy>=1.26.0 - Array operations
 
-### Dependencies
-
-- `pygame>=2.6.1` - Camera capture and real-time display
-- `Pillow>=10.0.0` - Image processing
-- `numpy>=1.26.0` - Array operations
+Note: This project is intended for educational and learning purposes. It is not currently recommended for production-level use.
 
 ---
 
-## Quick Start
+Quick Start
 
-### 1. Create and Save an Image
+1. Create and Save an Image
 
 ```python
 from litecv import new_image
@@ -126,7 +129,7 @@ img.draw_rectangle((100, 100), (300, 200), color='green', width=2)
 img.save('my_image.jpg')
 ```
 
-### 2. Apply Filters
+2. Apply Filters
 
 ```python
 from litecv import open_image, FilterType, StreamingFilter
@@ -142,7 +145,7 @@ result = filter.apply(img.copy())
 result.save('my_image_grayscale.jpg')
 ```
 
-### 3. Real-Time Camera
+3. Real-Time Camera
 
 ```python
 from litecv import RealTimeCameraApp
@@ -157,7 +160,7 @@ app.start()
 # ESC: Exit
 ```
 
-### 4. Image Manipulation
+4. Image Manipulation
 
 ```python
 from litecv import open_image, concatenate, blend_images
@@ -185,67 +188,73 @@ blended.save('blended.jpg')
 
 ---
 
-## Available Filters
+Available Filters
 
-LiteCV includes 10+ built-in filters accessible via `FilterType` enum:
+LiteCV includes 10+ built-in filters accessible via FilterType enum:
 
-| Filter | Description | Use Case |
-|--------|-------------|----------|
-| `GRAYSCALE` | Convert to grayscale | B&W photography, preprocessing |
-| `EDGES` | Edge detection | Object boundary detection |
-| `BLUR` | Gaussian blur | Smoothing, privacy masking |
-| `SEPIA` | Vintage sepia tone | Retro effects |
-| `CARTOON` | Cartoon effect | Artistic rendering |
-| `SKETCH` | Pencil sketch | Art simulation |
-| `THERMAL` | Thermal imaging | Thermal effect |
-| `NIGHT_VISION` | Night vision effect | Low-light simulation |
-| `INFRARED` | Infrared imaging | IR effect |
-| `MOTION_DETECT` | Motion detection | Movement tracking |
-
----
-
-## Documentation
-
-### API Reference
-
-See [docs/api.md](docs/api.md) for complete API documentation including:
-- `AdvancedLiteImage` class methods
-- `StreamingFilter` usage
-- `CameraFeed` real-time control
-- Utility functions
-
-### Usage Guide
-
-See [docs/usage.md](docs/usage.md) for:
-- Detailed usage examples
-- Best practices
-- Performance optimization tips
-- Common workflows
+Filter Description Use Case
+GRAYSCALE Convert to grayscale B&W photography, preprocessing
+EDGES Edge detection Object boundary detection
+BLUR Gaussian blur Smoothing, privacy masking
+SEPIA Vintage sepia tone Retro effects
+CARTOON Cartoon effect Artistic rendering
+SKETCH Pencil sketch Art simulation
+THERMAL Thermal imaging Thermal effect
+NIGHT_VISION Night vision effect Low-light simulation
+INFRARED Infrared imaging IR effect
+MOTION_DETECT Motion detection Movement tracking
 
 ---
 
-## Examples
+Documentation
 
-The `examples/` folder contains production-ready demo scripts:
+API Reference
 
-### Basic Operations
-- [basic_image.py](examples/basic_image.py) - Create and draw on images
-- [utilities.py](examples/utilities.py) - Image concatenation and blending
+See docs/api.md for complete API documentation including:
 
-### Filters
-- [filters_demo.py](examples/filters_demo.py) - Apply all available filters
+· AdvancedLiteImage class methods
+· StreamingFilter usage
+· CameraFeed real-time control
+· Utility functions
 
-### Real-Time
-- [camera_app.py](examples/camera_app.py) - Interactive camera application
+Usage Guide
 
-### Advanced
-- [object_detection.py](examples/object_detection.py) - Object detection demo
-- [video_demo.py](examples/video_demo.py) - Video frame processing
+See docs/usage.md for:
 
-### Branding
-- [logo_demo.py](examples/logo_demo.py) - Access logo assets programmatically
+· Detailed usage examples
+· Best practices
+· Performance optimization tips
+· Common workflows
 
-### Running Examples
+---
+
+Examples
+
+The examples/ folder contains production-ready demo scripts:
+
+Basic Operations
+
+· basic_image.py - Create and draw on images
+· utilities.py - Image concatenation and blending
+
+Filters
+
+· filters_demo.py - Apply all available filters
+
+Real-Time
+
+· camera_app.py - Interactive camera application
+
+Advanced
+
+· object_detection.py - Object detection demo
+· video_demo.py - Video frame processing
+
+Branding
+
+· logo_demo.py - Access logo assets programmatically
+
+Running Examples
 
 ```bash
 # Run any example with:
@@ -259,7 +268,7 @@ python examples/camera_app.py
 
 ---
 
-## Project Structure
+Project Structure
 
 ```
 litecv/
@@ -293,9 +302,9 @@ litecv/
 
 ---
 
-## Performance Tips
+Performance Tips
 
-### For Real-Time Applications
+For Real-Time Applications
 
 ```python
 # Use optimize_speed=True for mobile/real-time
@@ -306,7 +315,7 @@ img.blur(radius=2, optimize_speed=True)
 arr = img.to_numpy()  # Cached internally
 ```
 
-### Memory Optimization
+Memory Optimization
 
 ```python
 # Work with copies to preserve originals
@@ -319,9 +328,9 @@ images = [open_image(f) for f in file_list[:10]]
 
 ---
 
-## Troubleshooting
+Troubleshooting
 
-### Camera Not Detected
+Camera Not Detected
 
 ```python
 # Check available cameras
@@ -331,7 +340,7 @@ cameras = pygame.camera.list_cameras()
 print("Available cameras:", cameras)
 ```
 
-### Import Errors
+Import Errors
 
 Ensure all dependencies are installed:
 
@@ -339,7 +348,7 @@ Ensure all dependencies are installed:
 pip install pygame pillow numpy
 ```
 
-### Image Codec Issues
+Image Codec Issues
 
 For specific formats, install additional codecs:
 
@@ -350,9 +359,9 @@ pip install Pillow-webp
 
 ---
 
-## Related Projects
+Related Projects
 
-### LowMind
+LowMind
 
 LowMind is a companion project providing AI and machine learning utilities. Install it with:
 
@@ -360,54 +369,54 @@ LowMind is a companion project providing AI and machine learning utilities. Inst
 pip install lowmind
 ```
 
-Visit the [LowMind documentation](https://pypi.org/project/lowmind/) for more information.
+Visit the LowMind documentation for more information.
 
 ---
 
-## Contributing
+Contributing
 
 We welcome contributions! To contribute:
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
+1. Fork the repository
+2. Create a feature branch (git checkout -b feature/amazing-feature)
+3. Commit your changes (git commit -m 'Add amazing feature')
+4. Push to the branch (git push origin feature/amazing-feature)
+5. Open a Pull Request
 
-### Development Setup
+Development Setup
 
 ```bash
-git clone https://github.com/yourusername/litecv.git
+git clone https://github.com/dhaval-vedra/litecv.git
 cd litecv
 pip install -e .
 python -m pytest tests/
 ```
 
-### Code Style
+Code Style
 
-- Follow PEP 8
-- Use type hints where possible
-- Write docstrings for all public methods
-- Add tests for new features
-
----
-
-## Roadmap
-
-- [ ] GPU acceleration with CUDA
-- [ ] More object detection models
-- [ ] Video file I/O
-- [ ] Face detection and recognition
-- [ ] Machine learning integration
-- [ ] Mobile app support
-- [ ] Web interface
-- [ ] Performance benchmarks
+· Follow PEP 8
+· Use type hints where possible
+· Write docstrings for all public methods
+· Add tests for new features
 
 ---
 
-## License
+Roadmap
 
-LiteCV is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
+· GPU acceleration with CUDA
+· More object detection models
+· Video file I/O
+· Face detection and recognition
+· Machine learning integration
+· Mobile app support
+· Web interface
+· Performance benchmarks
+
+---
+
+License
+
+LiteCV is licensed under the MIT License - see LICENSE file for details.
 
 ```
 MIT License
@@ -421,37 +430,39 @@ in the Software without restriction...
 
 ---
 
-## Changelog
+Changelog
 
-### Version 0.1.0 (2026-05-03)
-- Initial release
-- Core image operations
-- 10+ built-in filters
-- Real-time camera support
-- Object detection framework
-- Comprehensive documentation
-- 8 example scripts
+Version 0.1.0 (2026-05-03)
 
----
-
-## Support
-
-- 📖 [Documentation](docs/)
-- 💬 [Issues](https://github.com/yourusername/litecv/issues)
-- 📧 Contact: author@example.com
+· Initial release
+· Core image operations
+· 10+ built-in filters
+· Real-time camera support
+· Object detection framework
+· Comprehensive documentation
+· 8 example scripts
 
 ---
 
-## Acknowledgments
+Support
 
-- Built with [Pillow](https://python-pillow.org/)
-- Camera support via [Pygame](https://www.pygame.org/)
-- Array operations with [NumPy](https://numpy.org/)
-- Inspired by [OpenCV](https://opencv.org/)
+· 📖 Documentation
+· 💬 Issues
+· 📧 Email: author@example.com
+
+---
+
+Acknowledgments
+
+· Built with Pillow
+· Camera support via Pygame
+· Array operations with NumPy
+· Inspired by OpenCV
+
+Note: This project is intended for educational and learning purposes. It is not currently recommended for production-level use.
 
 ---
 
 <p align="center">
   Made with ❤️ by the LiteCV team
 </p>
-```
