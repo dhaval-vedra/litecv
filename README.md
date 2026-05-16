@@ -1,4 +1,4 @@
-# litecv Computer Vision Framework 
+
 <div align="center">
 
 ![Raspberry Pi Optimized](https://img.shields.io/badge/Raspberry%20Pi-Optimized-C51A4A?style=for-the-badge&logo=raspberrypi)
