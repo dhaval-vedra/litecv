@@ -13,7 +13,7 @@ def read_readme():
 setup(
     # मूल जानकारी
     name="litecv",
-    version="0.1.0",
+    version="0.2.0",
     packages=find_packages(exclude=['examples', 'docs', 'tests', 'logo']),
     
     # पैकेज फ़ाइलें
