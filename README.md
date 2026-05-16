@@ -1,6 +1,3 @@
-Here's a clean, well-structured README.md for your LiteCV project:
-
-```markdown
 # LiteCV - Lightweight Computer Vision Library
 
 <div align="center">
