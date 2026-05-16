@@ -1,10 +1,11 @@
+# litecv Computer Vision Framework 
 <div align="center">
-
 
 ![Raspberry Pi Optimized](https://img.shields.io/badge/Raspberry%20Pi-Optimized-C51A4A?style=for-the-badge&logo=raspberrypi)
 ![Python 3.6+](https://img.shields.io/badge/Python-3.6%2B-blue?style=for-the-badge&logo=python)
 ![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status Active Development](https://img.shields.io/badge/Status-Active%20Development-orange?style=for-the-badge)
+</div>
 
 # LiteCV - Lightweight Computer Vision Library
 
@@ -430,7 +431,7 @@ in the Software without restriction...
 
 Changelog
 
-Version 0.1.0 (2026-05-03)
+Version 0.2.0 (2026-05-16)
 
 · Initial release
 · Core image operations
@@ -464,4 +465,4 @@ Note: This project is intended for educational and learning purposes. It is not 
 <p align="center">
   Made with ❤️ by the LiteCV team
 </p>
-</div>
+
