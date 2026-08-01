@@ -8,6 +8,20 @@ Raspberry Pi · Jetson Nano · Any ARM/x86 Linux board
 
 ---
 
+
+<!-- QUICK INSTALL -->
+<div align="center">
+
+### ⚡ Get Started in Seconds
+
+```bash
+pip install litecv
+```
+
+*No OpenCV. No pygame. No heavy ML frameworks.*
+
+</div>
+
 ## Why litecv-advanced?
 
 | Feature | OpenCV | litecv-advanced |
