@@ -1,51 +1,72 @@
-# LiteCV Examples
+# litecv-advanced Examples
 
-This folder contains example scripts demonstrating various features of the LiteCV library.
-
-## Available Examples
-
-### Basic Usage
-- `demo.py` — Complete demo with image creation, filters, and camera app
-- `basic_image.py` — Draw shapes, text, and save images
-- `logo_demo.py` — Display and use LiteCV logos
-
-### Filters and Effects
-- `filters_demo.py` — Apply multiple built-in filters and save results
-
-### Advanced Features
-- `camera_app.py` — Launch the realtime camera application
-- `video_demo.py` — Placeholder video frame processing demo
-- `object_detection.py` — Object detection and overlay example
-- `utilities.py` — Image concatenation and blending examples
-
-## Running Examples
-
-All examples can be run directly with Python:
+## Run without a camera (testing on any machine)
 
 ```bash
+cd litecv-advanced
+
+# Basic image ops — creates several *.jpg files
 python examples/basic_image.py
-python examples/filters_demo.py
-python examples/logo_demo.py
+
+# Pipeline API demo — creates demo_*.jpg files
+python examples/pipeline_demo.py
+
+# Detection demo — creates detect_*.jpg files
+python examples/detection_demo.py
+
+# Streaming demo (no camera) — open http://localhost:8080/ in browser
+python examples/streaming_demo.py --no-camera --effect cartoon
 ```
 
-## Notes
+## Run with a USB/Pi camera
 
-- Camera examples (`camera_app.py`) require a webcam and will open a Pygame window
-- Some examples generate output files in the current directory
-- The `object_detection.py` example creates a sample image if none exists
+```bash
+# List available cameras
+ls /dev/video*
 
-## Logo Usage
+# Camera with profiling
+python examples/camera_advanced.py --device /dev/video0 --effect thermal --frames 200
 
-The library includes logo assets that can be accessed programmatically:
+# Camera with HTTP streaming (open browser at http://hostname:8080/)
+python examples/camera_advanced.py --device /dev/video0 --stream --effect night
 
-```python
-from litecv import get_logo_path, get_ascii_logo
+# Async camera (non-blocking)
+python examples/camera_advanced.py --device /dev/video0 --async_cam --effect cartoon
 
-# Get logo file paths
-svg_path = get_logo_path('svg')
-png_path = get_logo_path('png')
+# Save frames to directory
+python examples/camera_advanced.py --device /dev/video0 --save ./frames/
 
-# Get ASCII logo as string
-ascii_logo = get_ascii_logo()
-print(ascii_logo)
+# Motion detection
+python examples/camera_advanced.py --device /dev/video0 --motion
+
+# Stream with custom effect
+python examples/streaming_demo.py --device /dev/video0 --effect sepia --port 8080
 ```
+
+## Available effects
+
+| Effect | Description |
+|---|---|
+| `none` | No effect (raw) |
+| `clahe` | CLAHE — contrast enhance (great for dark rooms) |
+| `sepia` | Warm sepia tone |
+| `thermal` | Thermal/heat camera simulation |
+| `night` | Night vision (green, enhanced) |
+| `sketch` | Pencil sketch |
+| `cartoon` | Cartoon effect |
+
+## Example files created
+
+After running `basic_image.py`:
+- `basic_canvas.jpg` — drawing demo
+- `basic_effect_sepia.jpg`, `basic_effect_thermal.jpg`, etc.
+
+After running `pipeline_demo.py`:
+- `demo_source.jpg`, `demo_sepia.jpg`, `demo_thermal.jpg`, `demo_enhanced.jpg`, etc.
+
+After running `detection_demo.py`:
+- `detect_corners.jpg` — Harris corners visualized
+- `detect_flow.jpg` — optical flow vectors
+- `detect_motion_*.jpg` — motion detection frames
+- `detect_match_result.jpg` — template matching result
+- `detect_contours.jpg` — contour visualization

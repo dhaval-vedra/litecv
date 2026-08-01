@@ -1,92 +1,108 @@
+"""
+setup.py for litecv-advanced
 
-from setuptools import setup, find_packages
+Builds the optional C++ extension (_lcv_ext) via CMake + pybind11.
+If CMake or a compiler is not available, the build silently skips
+the extension and the library falls back to pure Python (Pillow + NumPy).
+
+Build:
+    pip install .                          # auto C++ detection
+    pip install . --no-build-isolation     # skip C++ (pure Python)
+    CMAKE_BUILD_PARALLEL_LEVEL=4 pip install .  # parallel C++ build
+"""
 import os
+import sys
+import subprocess
+import shutil
+from pathlib import Path
 
-# README.md फ़ाइल पढ़ें
-def read_readme():
-    readme_path = os.path.join(os.path.dirname(__file__), 'README.md')
-    if os.path.exists(readme_path):
-        with open(readme_path, 'r', encoding='utf-8') as f:
-            return f.read()
-    return "LiteCV - Lightweight Computer Vision Library"
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
+
+
+class CMakeBuildExt(build_ext):
+    """Custom build backend that delegates to CMake."""
+
+    def build_extension(self, ext):
+        ext_dir = Path(self.get_ext_fullpath(ext.name)).parent.resolve()
+        src_dir  = Path(__file__).parent / "src"
+        build_tmp = Path(self.build_temp) / ext.name
+
+        # Check for prerequisites
+        cmake = shutil.which("cmake")
+        compiler = shutil.which("c++") or shutil.which("g++") or shutil.which("clang++")
+        if not cmake or not compiler:
+            print(
+                "\n[litecv] CMake or C++ compiler not found — "
+                "building without C++ extension (pure-Python fallback).\n"
+                "For best performance: sudo apt-get install cmake g++\n"
+            )
+            return
+
+        # Check pybind11
+        try:
+            import pybind11  # noqa
+        except ImportError:
+            print("[litecv] pybind11 not found — building without C++ extension.\n"
+                  "         pip install pybind11\n")
+            return
+
+        build_tmp.mkdir(parents=True, exist_ok=True)
+
+        # CMake configure
+        cmake_args = [
+            cmake,
+            str(src_dir),
+            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={ext_dir}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
+            "-DCMAKE_BUILD_TYPE=Release",
+        ]
+        # Parallel jobs
+        jobs = os.cpu_count() or 4
+        build_args = ["--build", ".", "--config", "Release",
+                      "--parallel", str(jobs)]
+
+        try:
+            subprocess.check_call(cmake_args, cwd=build_tmp)
+            subprocess.check_call([cmake] + build_args, cwd=build_tmp)
+        except subprocess.CalledProcessError as e:
+            print(f"\n[litecv] C++ build failed ({e}) — falling back to pure Python.\n")
+
+    def run(self):
+        for ext in self.extensions:
+            self.build_extension(ext)
+
 
 setup(
-    # मूल जानकारी
-    name="litecv",
-    version="0.3.0",
-    packages=find_packages(exclude=['examples', 'docs', 'tests', 'logo']),
-    
-    # पैकेज फ़ाइलें
-    package_data={
-        'litecv': ['*.py'],
-    },
-    
-    # निर्भरताएँ (Dependencies)
-    install_requires=[
-        "pygame>=2.6.1",
-        "Pillow>=10.0.0",
-        "numpy>=1.26.0",
-    ],
-    
-    # अतिरिक्त विकल्प (Optional features)
-    extras_require={
-        'dev': [
-            'pytest>=7.0.0',
-            'pytest-cov>=4.0.0',
-        ],
-        'docs': [
-            'sphinx>=5.0.0',
-            'sphinx-rtd-theme>=1.0.0',
-        ],
-    },
-    
-    # लेखक और लाइसेंस
-    author="VEDRA",
-    author_email="gametidhaval980@gmail.com",
-    description="A lightweight, fast, and easy-to-use Python computer vision library",
-    long_description=read_readme(),
+    name="litecv-advanced",
+    version="2.0.0",
+    description="Lightweight, advanced computer vision for edge devices (Raspberry Pi, Jetson…)",
+    long_description=(Path(__file__).parent / "README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    url="https://github.com/dhaval-vedra/litecv",
-    project_urls={
-        "Documentation": "https://github.com/dhaval-vedra/litecv/docs",
-        "Source": "https://github.com/dhaval-bedra/litecv",
-        "Issues": "https://github.com/dhaval-vedra/litecv/issues",
-    },
-    
-    # लाइसेंस
+    author="litecv-advanced contributors",
     license="MIT",
-    
-    # क्लासिफायर (Categories)
-    classifiers=[
-        "Development Status :: 3 - Alpha",
-        "Intended Audience :: Developers",
-        "Intended Audience :: Education",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Topic :: Scientific/Engineering :: Artificial Intelligence",
-        "Topic :: Scientific/Engineering :: Image Processing",
-        "Topic :: Multimedia :: Graphics",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+    python_requires=">=3.8",
+    packages=["litecv"],
+    ext_modules=[Extension("_lcv_ext", sources=[])],
+    cmdclass={"build_ext": CMakeBuildExt},
+    install_requires=[
+        "Pillow>=9.0",
+        "numpy>=1.21",
     ],
-    
-    # Python वर्जन आवश्यकताएँ
-    python_requires=">=3.10",
-    
-    # कमांड-लाइन टूल्स (अगर कोई हों)
-    entry_points={
-        'console_scripts': [
-            # उदाहरण: 'litecv-demo=litecv._litecv:main',
-        ],
+    extras_require={
+        "ml":      ["tflite-runtime>=2.11"],
+        "onnx":    ["onnxruntime>=1.14"],
+        "camera":  ["picamera2"],
+        "all":     ["tflite-runtime>=2.11", "onnxruntime>=1.14"],
     },
-    
-    # कीवर्ड्स (PyPI पर खोजने में मदद)
-    keywords="computer-vision image-processing real-time camera filters opencv-alternative raspberry-pi",
-    
-    # अन्य मेटाडेटा
-    zip_safe=False,  # पैकेज को zip में न डालें (ताकि images/logo आसानी से एक्सेस हो सकें)
+    classifiers=[
+        "Development Status :: 4 - Beta",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: C++",
+        "Topic :: Scientific/Engineering :: Image Processing",
+        "Topic :: Software Development :: Embedded Systems",
+    ],
+    zip_safe=False,
 )
