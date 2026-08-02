@@ -1,4 +1,4 @@
-# litecv-advanced
+# litecv
 
 **Lightweight yet powerful computer vision library for edge devices**
 Raspberry Pi · Jetson Nano · Any ARM/x86 Linux board
