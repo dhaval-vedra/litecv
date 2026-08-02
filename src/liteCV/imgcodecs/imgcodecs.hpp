@@ -32,9 +32,11 @@ namespace fs = std::experimental::filesystem;
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
+#undef STB_IMAGE_IMPLEMENTATION
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb/stb_image_write.h"
+#undef STB_IMAGE_WRITE_IMPLEMENTATION
 
 
 namespace lcv
@@ -103,6 +105,8 @@ namespace lcv
             cvtColor(img, _img, COLOR_RGB2BGR);
         else if (img.channels() == 4)
             cvtColor(img, _img, COLOR_BGRA2RGBA);
+        else
+            _img = img;
 
         // Write image to file to use proper image encoder by the extension
         // `params` is not used yet :(

@@ -39,3 +39,8 @@ cmake_install.cmake
 .pytest_cache/
 .coverage
 htmlcov/
+
+# Exclude generated binaries and output images
+*.so
+*.jpg
+*.png
