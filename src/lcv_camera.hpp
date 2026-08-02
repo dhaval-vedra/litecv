@@ -23,6 +23,7 @@
 #include <cstring>
 
 // STB decode for MJPEG
+#define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
 #include "liteCV/imgcodecs/stb/stb_image.h"
 

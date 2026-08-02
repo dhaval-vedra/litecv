@@ -266,7 +266,7 @@ namespace lcv
         MatrixType constant;
 
         constexpr ConstMatrixType()
-            : constant(Bits, Channels, NType)
+            : constant({ Bits, Channels, NType })
         {}
     }; // struct ConstMatrixType
 

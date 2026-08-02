@@ -31,6 +31,8 @@
 #include <algorithm>
 
 // liteCV6 headers
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "liteCV/core/lcvdef.hpp"
 #include "liteCV/core/lcvtypes.hpp"
 #include "liteCV/core/matrix.hpp"
@@ -48,13 +50,6 @@
 #include "lcv_morph.hpp"
 #include "lcv_camera.hpp"
 
-#ifdef SSD
-#undef SSD
-#endif
-#ifdef NCC
-#undef NCC
-#endif
-
 namespace py = pybind11;
 
 // ── Helpers: numpy ↔ lcv::Mat ─────────────────────────────────────────────
@@ -62,12 +57,12 @@ static lcv::Mat numpy_to_mat(py::array_t<uint8_t, py::array::c_style> arr) {
     auto info = arr.request();
     if (info.ndim == 2) {
         int h = info.shape[0], w = info.shape[1];
-        lcv::Mat m(w, h, 1, "uint8");
+        lcv::Mat m(h, w, 1);
         std::memcpy(m.data, info.ptr, h * w);
         return m;
     } else if (info.ndim == 3) {
         int h = info.shape[0], w = info.shape[1], ch = info.shape[2];
-        lcv::Mat m(w, h, ch, "uint8");
+        lcv::Mat m(h, w, ch);
         std::memcpy(m.data, info.ptr, h * w * ch);
         return m;
     }
@@ -75,23 +70,23 @@ static lcv::Mat numpy_to_mat(py::array_t<uint8_t, py::array::c_style> arr) {
 }
 
 static py::array_t<uint8_t> mat_to_numpy(const lcv::Mat& m) {
-    if (m.channels() == 1)
+    if (m.channels == 1)
         return py::array_t<uint8_t>({m.rows, m.cols}, m.data);
-    return py::array_t<uint8_t>({m.rows, m.cols, m.channels()}, m.data);
+    return py::array_t<uint8_t>({m.rows, m.cols, m.channels}, m.data);
 }
 
 // ── Resize (work around liteCV6 assert bug) ─────────────────────────────
 static lcv::Mat safe_resize(const lcv::Mat& src, int new_w, int new_h) {
-    lcv::Mat dst(new_w, new_h, src.channels(), "uint8");
+    lcv::Mat dst(new_h, new_w, src.channels);
     float sx = (float)(src.cols)  / new_w;
     float sy = (float)(src.rows) / new_h;
     for (int y = 0; y < new_h; y++) {
         for (int x = 0; x < new_w; x++) {
             int sy2 = std::min((int)(y * sy), src.rows - 1);
             int sx2 = std::min((int)(x * sx), src.cols - 1);
-            for (int c = 0; c < src.channels(); c++)
-                dst.data[(y * new_w + x) * dst.channels() + c] =
-                    src.data[(sy2 * src.cols + sx2) * src.channels() + c];
+            for (int c = 0; c < src.channels; c++)
+                dst.data[(y * new_w + x) * dst.channels + c] =
+                    src.data[(sy2 * src.cols + sx2) * src.channels + c];
         }
     }
     return dst;
@@ -264,12 +259,10 @@ static py::list py_find_contours(
         float area = lcv_adv::contour_area(c);
         py::list pts;
         for (auto& [px, py2] : c) pts.append(py::make_tuple(px, py2));
-        py::dict d;
-        d["points"] = pts;
-        d["bbox"] = py::make_tuple(x, y, cw, ch2);
-        d["area"] = area;
-        d["length"] = (int)c.size();
-        result.append(d);
+        result.append(py::dict(
+            "points"_a=pts, "bbox"_a=py::make_tuple(x,y,cw,ch2),
+            "area"_a=area, "length"_a=(int)c.size()
+        ));
     }
     return result;
 }
@@ -304,17 +297,15 @@ static py::list py_dominant_colors(
     int num_pixels = info.shape[0] * info.shape[1];
     auto colors = lcv_adv::dominant_colors((const uint8_t*)info.ptr, num_pixels, num_colors);
     py::list result;
-    for (auto& c : colors) {
-        py::dict d;
-        d["r"] = c.r;
-        d["g"] = c.g;
-        d["b"] = c.b;
-        d["fraction"] = c.fraction;
-        char buf[8];
-        snprintf(buf, sizeof(buf), "%02X%02X%02X", c.r, c.g, c.b);
-        d["hex"] = "#" + std::string(buf);
-        result.append(d);
-    }
+    for (auto& c : colors)
+        result.append(py::dict(
+            "r"_a=c.r, "g"_a=c.g, "b"_a=c.b, "fraction"_a=c.fraction,
+            "hex"_a=("#" + [&](){
+                char buf[8];
+                snprintf(buf, sizeof(buf), "%02X%02X%02X", c.r, c.g, c.b);
+                return std::string(buf);
+            }())
+        ));
     return result;
 }
 
@@ -390,7 +381,7 @@ static py::array_t<uint8_t> py_imread(const std::string& path, bool grayscale) {
     lcv::Mat m = lcv::imread(path, grayscale ? 0 : 1);
     if (m.data == nullptr) throw std::runtime_error("imread failed: " + path);
     // liteCV6 returns BGR; convert to RGB
-    if (!grayscale && m.channels() == 3) {
+    if (!grayscale && m.channels == 3) {
         for (int i = 0; i < m.rows * m.cols; i++)
             std::swap(m.data[i*3+0], m.data[i*3+2]);
     }
@@ -400,7 +391,7 @@ static py::array_t<uint8_t> py_imread(const std::string& path, bool grayscale) {
 static void py_imwrite(const std::string& path, py::array_t<uint8_t, py::array::c_style> arr) {
     lcv::Mat m = numpy_to_mat(arr);
     // Convert RGB → BGR for liteCV6
-    if (m.channels() == 3) {
+    if (m.channels == 3) {
         for (int i = 0; i < m.rows * m.cols; i++)
             std::swap(m.data[i*3+0], m.data[i*3+2]);
     }
@@ -410,21 +401,18 @@ static void py_imwrite(const std::string& path, py::array_t<uint8_t, py::array::
 
 static py::array_t<uint8_t> py_imdecode(py::bytes data) {
     std::string s = data;
-    std::vector<uchar> buf((uint8_t*)s.data(), (uint8_t*)s.data() + s.size());
-    lcv::Mat m = lcv::imdecode(buf);
+    lcv::Mat m = lcv::imdecode({(uint8_t*)s.data(), s.size()});
     if (m.data == nullptr) throw std::runtime_error("imdecode failed");
-    if (m.channels() == 3)
+    if (m.channels == 3)
         for (int i = 0; i < m.rows * m.cols; i++) std::swap(m.data[i*3+0], m.data[i*3+2]);
     return mat_to_numpy(m);
 }
 
 static py::bytes py_imencode(py::array_t<uint8_t, py::array::c_style> arr, const std::string& ext) {
     lcv::Mat m = numpy_to_mat(arr);
-    if (m.channels() == 3)
+    if (m.channels == 3)
         for (int i = 0; i < m.rows * m.cols; i++) std::swap(m.data[i*3+0], m.data[i*3+2]);
-    std::vector<uchar> encoded;
-    if (!lcv::imencode(ext, m, encoded))
-        throw std::runtime_error("imencode failed");
+    auto encoded = lcv::imencode(ext, m);
     return py::bytes((char*)encoded.data(), encoded.size());
 }
 
@@ -505,7 +493,7 @@ static py::array_t<uint8_t> py_sepia(py::array_t<uint8_t, py::array::c_style> ar
         dst[i*3+1] = lcv_simd::clamp_u8((int)(r*0.349f + g*0.686f + b*0.168f));
         dst[i*3+2] = lcv_simd::clamp_u8((int)(r*0.272f + g*0.534f + b*0.131f));
     }
-    return py::array_t<uint8_t>({info.shape[0], info.shape[1], (pybind11::ssize_t)3}, dst.data());
+    return py::array_t<uint8_t>({info.shape[0], info.shape[1], 3}, dst.data());
 }
 
 static py::array_t<uint8_t> py_thermal(py::array_t<uint8_t, py::array::c_style> arr) {
@@ -524,7 +512,7 @@ static py::array_t<uint8_t> py_thermal(py::array_t<uint8_t, py::array::c_style> 
         dst[i*3+1] = lcv_simd::clamp_u8((int)(255 * std::max(0.f, std::min(1.f, 3.f*v - 1.f))));
         dst[i*3+2] = lcv_simd::clamp_u8((int)(255 * std::max(0.f, std::min(1.f, 3.f*v - 2.f))));
     }
-    return py::array_t<uint8_t>({info.shape[0], info.shape[1], (pybind11::ssize_t)3}, dst.data());
+    return py::array_t<uint8_t>({info.shape[0], info.shape[1], 3}, dst.data());
 }
 
 static py::array_t<uint8_t> py_night_vision(py::array_t<uint8_t, py::array::c_style> arr) {
@@ -545,7 +533,7 @@ static py::array_t<uint8_t> py_night_vision(py::array_t<uint8_t, py::array::c_st
         dst[i*3+1] = enhanced[i]; // Green channel only (night vision look)
         dst[i*3+2] = 0;
     }
-    return py::array_t<uint8_t>({info.shape[0], info.shape[1], (pybind11::ssize_t)3}, dst.data());
+    return py::array_t<uint8_t>({info.shape[0], info.shape[1], 3}, dst.data());
 }
 
 static py::array_t<uint8_t> py_sketch(py::array_t<uint8_t, py::array::c_style> arr) {
@@ -704,12 +692,12 @@ PYBIND11_MODULE(_lcv_ext, m) {
     m.def("simd_backend", []() { return std::string(lcv_simd::simd_name()); },
           "Return the active SIMD backend name (NEON / SSE2 / AVX2 / scalar)");
 
-    m.def("pool_stats", []() -> py::dict {
-        py::dict d;
-        d["frame_used_mb"] = lcv_pool::g_frame_pool.used / (1024.f*1024.f);
-        d["frame_total_mb"] = (float)lcv_pool::FRAME_POOL_SIZE / (1024.f*1024.f);
-        d["scratch_used_mb"] = lcv_pool::g_scratch_pool.used / (1024.f*1024.f);
-        return d;
+    m.def("pool_stats", []() {
+        return py::dict(
+            "frame_used_mb"_a = lcv_pool::g_frame_pool.used / (1024.f*1024.f),
+            "frame_total_mb"_a = (float)lcv_pool::FRAME_POOL_SIZE / (1024.f*1024.f),
+            "scratch_used_mb"_a = lcv_pool::g_scratch_pool.used / (1024.f*1024.f)
+        );
     }, "Memory pool usage statistics");
 
     m.def("pool_reset", []() {
