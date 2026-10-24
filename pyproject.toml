@@ -9,6 +9,16 @@ description = "Lightweight advanced computer vision for edge devices"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8"
+# यहाँ नीचे क्लासिफायर्स जोड़े गए हैं
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13", # यह लाइन जोड़ी गई है
+]
 dependencies = [
     "Pillow>=9.0",
     "numpy>=1.21",
